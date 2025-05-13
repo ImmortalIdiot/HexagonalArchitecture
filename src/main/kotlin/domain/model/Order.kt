@@ -9,8 +9,8 @@ class Order(
 ) {
     val id: String = UUID.randomUUID().toString()
     var status: OrderStatus = OrderStatus.CREATED
-    private var cost: Double = calculateTotalPrice()
-    private val createdAt: LocalDateTime = LocalDateTime.now()
+    var cost: Double = calculateTotalPrice()
+    val createdAt: LocalDateTime = LocalDateTime.now()
 
     fun addItem(product: Product, quantity: Int) {
         if (quantity <= 0) {
