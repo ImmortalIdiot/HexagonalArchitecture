@@ -26,7 +26,7 @@ class ConsoleManager(private val orderManagement: OrderService) {
         if (currentOrderId != null) {
             println("Текущий заказ: #$currentOrderId | Статус - $currentOrderStatus")
         }
-        println("1. Создать новый заказ")
+        println("1. Создать заказ")
         println("2. Выбрать существующий заказ")
         println("3. Показать все заказы")
 
