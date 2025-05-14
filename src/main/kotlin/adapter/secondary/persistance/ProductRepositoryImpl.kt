@@ -4,7 +4,7 @@ import domain.model.Product
 import domain.port.secondary.ProductRepository
 import java.time.LocalDate
 
-class ProductRepository : ProductRepository {
+class ProductRepositoryImpl : ProductRepository {
     private val products = HashMap<String, Product>()
 
     init {

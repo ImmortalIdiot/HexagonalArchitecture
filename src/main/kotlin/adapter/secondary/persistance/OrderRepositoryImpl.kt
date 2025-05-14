@@ -3,7 +3,7 @@ package adapter.secondary.persistance
 import domain.model.Order
 import domain.port.secondary.OrderRepository
 
-class OrderRepository : OrderRepository {
+class OrderRepositoryImpl : OrderRepository {
     private val orders = HashMap<String, Order>()
 
     override fun save(order: Order) {

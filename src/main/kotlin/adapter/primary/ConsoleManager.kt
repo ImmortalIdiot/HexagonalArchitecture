@@ -13,6 +13,7 @@ class ConsoleManager(private val orderManagement: OrderService) {
 
     fun start() {
         var choice: Int
+        println("Запуск системы управления заказами...")
         do {
             showMainMenu()
             choice = readIntInput()
@@ -201,7 +202,7 @@ class ConsoleManager(private val orderManagement: OrderService) {
 
         println("\nТекущий статус заказа: $currentStatus")
 
-        val availableStatuses = OrderStatus.values()
+        val availableStatuses = OrderStatus.entries.toTypedArray()
         println("Доступные статусы:")
         for (i in availableStatuses.indices) {
             println("${i + 1}. ${availableStatuses[i]}")
