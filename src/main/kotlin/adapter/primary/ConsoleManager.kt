@@ -200,31 +200,51 @@ class ConsoleManager(private val orderManagement: OrderService) {
         val orderOpt = orderManagement.getOrderById(currentOrderId!!)
         val currentStatus = orderOpt.status
 
+        lateinit var availableStatuses: List<OrderStatus>
+
+        when {
+            currentStatus == OrderStatus.CREATED -> {
+                availableStatuses = listOf(OrderStatus.CONFIRMED, OrderStatus.CANCELED)
+            }
+            currentStatus == OrderStatus.CONFIRMED -> {
+                availableStatuses = listOf(OrderStatus.GOING, OrderStatus.CANCELED)
+            }
+            currentStatus == OrderStatus.GOING -> {
+                availableStatuses = listOf(OrderStatus.DELIVERED, OrderStatus.CANCELED)
+            }
+            currentStatus == OrderStatus.DELIVERED -> {
+                availableStatuses = listOf()
+            }
+        }
+
         println("\nТекущий статус заказа: $currentStatus")
 
-        val availableStatuses = OrderStatus.entries.toTypedArray()
-        println("Доступные статусы:")
-        for (i in availableStatuses.indices) {
-            println("${i + 1}. ${availableStatuses[i]}")
-        }
+        if (availableStatuses.isEmpty()) {
+            println("Заказ доставлен. Нет доступных статусов.")
+        } else {
+            println("Доступные статусы:")
+            for (i in availableStatuses.indices) {
+                println("${i + 1}. ${availableStatuses[i]}")
+            }
 
-        print("Выберите новый статус (1-${availableStatuses.size}): ")
-        val statusIndex = readIntInput() - 1
-        scanner.nextLine()
+            print("Выберите новый статус (1-${availableStatuses.size}): ")
+            val statusIndex = readIntInput() - 1
+            scanner.nextLine()
 
-        if (statusIndex < 0 || statusIndex >= availableStatuses.size) {
-            println("Некорректный выбор статуса.")
-            return
-        }
+            if (statusIndex < 0 || statusIndex >= availableStatuses.size) {
+                println("Некорректный выбор статуса.")
+                return
+            }
 
-        val newStatus = availableStatuses[statusIndex]
+            val newStatus = availableStatuses[statusIndex]
 
-        try {
-            orderManagement.changeOrderStatus(currentOrderId!!, newStatus)
-            currentOrderStatus = newStatus
-            println("Статус заказа успешно изменен на: $newStatus")
-        } catch (e: Exception) {
-            println("Ошибка при изменении статуса: ${e.message}")
+            try {
+                orderManagement.changeOrderStatus(currentOrderId!!, newStatus)
+                currentOrderStatus = newStatus
+                println("Статус заказа успешно изменен на: $newStatus")
+            } catch (e: Exception) {
+                println("Ошибка при изменении статуса: ${e.message}")
+            }
         }
 
         if (currentOrderStatus == OrderStatus.CANCELED) {
